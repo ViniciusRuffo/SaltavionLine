@@ -8,7 +8,6 @@ import javax.swing.JPanel;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author G-FIRE
@@ -20,21 +19,26 @@ public class TelaAdm extends javax.swing.JFrame {
      */
     public TelaAdm() {
         initComponents();
-       funPan.setVisible(false);
+        funPan.setVisible(false);
     }
-    public void mudarCor (JPanel pane){
-        pane.setBackground(new Color(130,145,143));
+
+    public void mudarCor(JPanel pane) {
+        pane.setBackground(new Color(130, 145, 143));
     }
-    public void mudarPanel (JPanel panel,JPanel panel2){
+
+    public void mudarPanel(JPanel panel, JPanel pane2, JPanel pane3) {
         panel.setVisible(true);
-        panel2.setVisible(false);
+        pane2.setVisible(false);
+        pane3.setVisible(false);
     }
-    public void voltarCor(JPanel pane, JPanel pane2, JPanel pane3, JPanel pane4){
-       pane.setBackground(new Color(73,149,136));
-       pane2.setBackground(new Color(73,149,136));
-       pane3.setBackground(new Color(73,149,136));
-       pane4.setBackground(new Color(73,149,136));
+
+    public void voltarCor(JPanel pane, JPanel pane2, JPanel pane3, JPanel pane4) {
+        pane.setBackground(new Color(73, 149, 136));
+        pane2.setBackground(new Color(73, 149, 136));
+        pane3.setBackground(new Color(73, 149, 136));
+        pane4.setBackground(new Color(73, 149, 136));
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -66,17 +70,19 @@ public class TelaAdm extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        admPan = new javax.swing.JPanel();
+        jLabel17 = new javax.swing.JLabel();
         funPan = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jPanel1 = new javax.swing.JPanel();
+        remFunPan = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jTextField1 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jLabel15 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        funCadPan = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         jTextField4 = new javax.swing.JTextField();
@@ -129,6 +135,11 @@ public class TelaAdm extends javax.swing.JFrame {
 
         admBtn.setBackground(new java.awt.Color(73, 149, 136));
         admBtn.setForeground(new java.awt.Color(73, 149, 136));
+        admBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                admBtnMouseClicked(evt);
+            }
+        });
         admBtn.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/adm.png"))); // NOI18N
@@ -213,6 +224,31 @@ public class TelaAdm extends javax.swing.JFrame {
 
         paineis.add(inicioPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 640));
 
+        admPan.setBackground(new java.awt.Color(196, 231, 219));
+
+        jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel17.setText("Administradores");
+
+        javax.swing.GroupLayout admPanLayout = new javax.swing.GroupLayout(admPan);
+        admPan.setLayout(admPanLayout);
+        admPanLayout.setHorizontalGroup(
+            admPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, admPanLayout.createSequentialGroup()
+                .addContainerGap(331, Short.MAX_VALUE)
+                .addComponent(jLabel17)
+                .addGap(309, 309, 309))
+        );
+        admPanLayout.setVerticalGroup(
+            admPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(admPanLayout.createSequentialGroup()
+                .addGap(96, 96, 96)
+                .addComponent(jLabel17)
+                .addContainerGap(496, Short.MAX_VALUE))
+        );
+
+        paineis.add(admPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 640));
+
         funPan.setBackground(new java.awt.Color(196, 231, 219));
         funPan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -225,7 +261,7 @@ public class TelaAdm extends javax.swing.JFrame {
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
         funPan.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 640, 30));
 
-        jPanel1.setBackground(new java.awt.Color(73, 138, 136));
+        remFunPan.setBackground(new java.awt.Color(73, 138, 136));
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
@@ -237,44 +273,41 @@ public class TelaAdm extends javax.swing.JFrame {
         jTextField3.setForeground(new java.awt.Color(255, 255, 255));
         jTextField3.setText("Senha do funcionário");
         jTextField3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
-        jTextField3.setRequestFocusEnabled(false);
 
         jTextField2.setBackground(new java.awt.Color(73, 138, 136));
         jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTextField2.setForeground(new java.awt.Color(255, 255, 255));
         jTextField2.setText("Usuário do funcionario");
         jTextField2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
-        jTextField2.setRequestFocusEnabled(false);
 
         jTextField1.setBackground(new java.awt.Color(73, 138, 136));
         jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTextField1.setForeground(new java.awt.Color(255, 255, 255));
         jTextField1.setText("Nome do funcionário");
         jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
-        jTextField1.setRequestFocusEnabled(false);
 
         jButton2.setBackground(new java.awt.Color(73, 138, 136));
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Remover Funcionário");
         jButton2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout remFunPanLayout = new javax.swing.GroupLayout(remFunPan);
+        remFunPan.setLayout(remFunPanLayout);
+        remFunPanLayout.setHorizontalGroup(
+            remFunPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(remFunPanLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(remFunPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextField1)
                     .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
                     .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        remFunPanLayout.setVerticalGroup(
+            remFunPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(remFunPanLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -288,14 +321,14 @@ public class TelaAdm extends javax.swing.JFrame {
                 .addGap(17, 17, 17))
         );
 
-        funPan.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 200, 280, 350));
+        funPan.add(remFunPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 210, 280, 350));
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(51, 51, 51));
         jLabel15.setText("<html>Adicione novos funcionários que poderam ter acesso a sua aplicação ou remova funcionários que deseja remover o acesso.</html>");
         funPan.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 510, 70));
 
-        jPanel2.setBackground(new java.awt.Color(73, 138, 136));
+        funCadPan.setBackground(new java.awt.Color(73, 138, 136));
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
@@ -317,29 +350,26 @@ public class TelaAdm extends javax.swing.JFrame {
         jTextField4.setForeground(new java.awt.Color(255, 255, 255));
         jTextField4.setText("Senha do funcionário");
         jTextField4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
-        jTextField4.setRequestFocusEnabled(false);
 
         jTextField5.setBackground(new java.awt.Color(73, 138, 136));
         jTextField5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTextField5.setForeground(new java.awt.Color(255, 255, 255));
         jTextField5.setText("Usuário do funcionario");
         jTextField5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
-        jTextField5.setRequestFocusEnabled(false);
 
         jTextField6.setBackground(new java.awt.Color(73, 138, 136));
         jTextField6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTextField6.setForeground(new java.awt.Color(255, 255, 255));
         jTextField6.setText("Nome do funcionário");
         jTextField6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
-        jTextField6.setRequestFocusEnabled(false);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout funCadPanLayout = new javax.swing.GroupLayout(funCadPan);
+        funCadPan.setLayout(funCadPanLayout);
+        funCadPanLayout.setHorizontalGroup(
+            funCadPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(funCadPanLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(funCadPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
                     .addComponent(jTextField6)
                     .addComponent(jTextField5)
@@ -347,9 +377,9 @@ public class TelaAdm extends javax.swing.JFrame {
                 .addContainerGap())
             .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        funCadPanLayout.setVerticalGroup(
+            funCadPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(funCadPanLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -363,7 +393,7 @@ public class TelaAdm extends javax.swing.JFrame {
                 .addGap(17, 17, 17))
         );
 
-        funPan.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 280, 350));
+        funPan.add(funCadPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 280, 350));
 
         paineis.add(funPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 640));
 
@@ -386,14 +416,14 @@ public class TelaAdm extends javax.swing.JFrame {
 
     private void inicioBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inicioBtnMouseClicked
         // TODO add your handling code here:
-        mudarPanel(inicioPan, funPan);
+        mudarPanel(inicioPan, funPan, admPan);
         mudarCor(inicioBtn);
         voltarCor(funBtn, admBtn, relBtn, pacienteBtn);
     }//GEN-LAST:event_inicioBtnMouseClicked
 
     private void funBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_funBtnMouseClicked
         // TODO add your handling code here:
-        mudarPanel(funPan, inicioPan);
+        mudarPanel(funPan, inicioPan, admPan);
         mudarCor(funBtn);
         voltarCor(inicioBtn, relBtn, pacienteBtn, admBtn);
     }//GEN-LAST:event_funBtnMouseClicked
@@ -401,6 +431,13 @@ public class TelaAdm extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void admBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_admBtnMouseClicked
+        // TODO add your handling code here:
+        mudarPanel(admPan, funPan, inicioPan);
+        mudarCor(admBtn);
+        voltarCor(inicioBtn, funBtn, pacienteBtn, relBtn);
+    }//GEN-LAST:event_admBtnMouseClicked
 
     /**
      * @param args the command line arguments
@@ -439,9 +476,11 @@ public class TelaAdm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel admBtn;
+    private javax.swing.JPanel admPan;
     private javax.swing.JLabel admlbl;
     private javax.swing.JPanel background;
     private javax.swing.JPanel funBtn;
+    private javax.swing.JPanel funCadPan;
     private javax.swing.JPanel funPan;
     private javax.swing.JPanel inicioBtn;
     private javax.swing.JPanel inicioPan;
@@ -455,6 +494,7 @@ public class TelaAdm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -463,8 +503,6 @@ public class TelaAdm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
@@ -476,5 +514,6 @@ public class TelaAdm extends javax.swing.JFrame {
     private javax.swing.JPanel pacienteBtn;
     private javax.swing.JLayeredPane paineis;
     private javax.swing.JPanel relBtn;
+    private javax.swing.JPanel remFunPan;
     // End of variables declaration//GEN-END:variables
 }
