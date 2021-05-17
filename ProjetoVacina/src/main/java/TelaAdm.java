@@ -1,4 +1,6 @@
 
+
+
 import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,19 +21,32 @@ public class TelaAdm extends javax.swing.JFrame {
      */
     public TelaAdm() {
         initComponents();
-        funPan.setVisible(false);
+        //Ocultando os paineis ao iniciar a aplicação pela primeira vez (exceto o de inicio)
+        atenPan.setVisible(false);
+        admPan.setVisible(false);
+        pacPan.setVisible(false);
     }
 
+    //Método para mudarCor do Botão do menu, o painel colocado no parâmetro deve ser
+    //o painel correspondente ao botão selecionado
+    //Exemplo: se o usuário selecionar a opção Pacientes o método muda a cor do botão
+    //para o usuário identificar qual opção foi selecionada
     public void mudarCor(JPanel pane) {
         pane.setBackground(new Color(130, 145, 143));
     }
 
-    public void mudarPanel(JPanel panel, JPanel pane2, JPanel pane3) {
+    //Método para mudar o painel exibido, o primeiro parâmetro define o que sera exibido
+    // os demais parâmetros ocultam os demais paineis
+    public void mudarPanel(JPanel panel, JPanel pane2, JPanel pane3, JPanel pane4) {
         panel.setVisible(true);
         pane2.setVisible(false);
         pane3.setVisible(false);
+        pane4.setVisible(false);
     }
 
+    //Método para voltar cor dos demais paineis que não foram selecionado
+    //exemplo: caso o usuário seleciona o botão de pacientes o método deve ser usado
+    //para voltar a cor dos 4 paineis restantes
     public void voltarCor(JPanel pane, JPanel pane2, JPanel pane3, JPanel pane4) {
         pane.setBackground(new Color(73, 149, 136));
         pane2.setBackground(new Color(73, 149, 136));
@@ -53,7 +68,7 @@ public class TelaAdm extends javax.swing.JFrame {
         inicioBtn = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        funBtn = new javax.swing.JPanel();
+        atenBtn = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         admBtn = new javax.swing.JPanel();
@@ -70,9 +85,7 @@ public class TelaAdm extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        admPan = new javax.swing.JPanel();
-        jLabel17 = new javax.swing.JLabel();
-        funPan = new javax.swing.JPanel();
+        atenPan = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         remFunPan = new javax.swing.JPanel();
@@ -88,8 +101,30 @@ public class TelaAdm extends javax.swing.JFrame {
         jTextField4 = new javax.swing.JTextField();
         jTextField5 = new javax.swing.JTextField();
         jTextField6 = new javax.swing.JTextField();
+        admPan = new javax.swing.JPanel();
+        jLabel17 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        remAdmPan = new javax.swing.JPanel();
+        jTextField7 = new javax.swing.JTextField();
+        jTextField8 = new javax.swing.JTextField();
+        jTextField9 = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
+        jLabel18 = new javax.swing.JLabel();
+        addAdmPan = new javax.swing.JPanel();
+        jTextField11 = new javax.swing.JTextField();
+        jTextField12 = new javax.swing.JTextField();
+        jButton5 = new javax.swing.JButton();
+        jLabel19 = new javax.swing.JLabel();
+        jTextField10 = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        pacPan = new javax.swing.JPanel();
+        jLabel21 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        paneTeste = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Salvation Line");
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/Imagens/medical_doctor_24px.png")).getImage());
         setLocationByPlatform(true);
         setResizable(false);
 
@@ -116,22 +151,22 @@ public class TelaAdm extends javax.swing.JFrame {
         jLabel1.setText("Inicio");
         inicioBtn.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, -1, 66));
 
-        funBtn.setBackground(new java.awt.Color(73, 149, 136));
-        funBtn.setForeground(new java.awt.Color(73, 149, 136));
-        funBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+        atenBtn.setBackground(new java.awt.Color(73, 149, 136));
+        atenBtn.setForeground(new java.awt.Color(73, 149, 136));
+        atenBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                funBtnMouseClicked(evt);
+                atenBtnMouseClicked(evt);
             }
         });
-        funBtn.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        atenBtn.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/atendente.png"))); // NOI18N
-        funBtn.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+        atenBtn.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Funcionários");
-        funBtn.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 0, 180, 66));
+        jLabel4.setText("Atendentes");
+        atenBtn.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 160, 66));
 
         admBtn.setBackground(new java.awt.Color(73, 149, 136));
         admBtn.setForeground(new java.awt.Color(73, 149, 136));
@@ -152,6 +187,11 @@ public class TelaAdm extends javax.swing.JFrame {
 
         pacienteBtn.setBackground(new java.awt.Color(73, 149, 136));
         pacienteBtn.setForeground(new java.awt.Color(73, 149, 136));
+        pacienteBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pacienteBtnMouseClicked(evt);
+            }
+        });
         pacienteBtn.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/vacina.png"))); // NOI18N
@@ -179,7 +219,7 @@ public class TelaAdm extends javax.swing.JFrame {
         menuLayout.setHorizontalGroup(
             menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(inicioBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(funBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(atenBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(admBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pacienteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(relBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -190,7 +230,7 @@ public class TelaAdm extends javax.swing.JFrame {
                 .addGap(131, 131, 131)
                 .addComponent(inicioBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(funBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(atenBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(admBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -224,42 +264,17 @@ public class TelaAdm extends javax.swing.JFrame {
 
         paineis.add(inicioPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 640));
 
-        admPan.setBackground(new java.awt.Color(196, 231, 219));
-
-        jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        jLabel17.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel17.setText("Administradores");
-
-        javax.swing.GroupLayout admPanLayout = new javax.swing.GroupLayout(admPan);
-        admPan.setLayout(admPanLayout);
-        admPanLayout.setHorizontalGroup(
-            admPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, admPanLayout.createSequentialGroup()
-                .addContainerGap(331, Short.MAX_VALUE)
-                .addComponent(jLabel17)
-                .addGap(309, 309, 309))
-        );
-        admPanLayout.setVerticalGroup(
-            admPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(admPanLayout.createSequentialGroup()
-                .addGap(96, 96, 96)
-                .addComponent(jLabel17)
-                .addContainerGap(496, Short.MAX_VALUE))
-        );
-
-        paineis.add(admPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 640));
-
-        funPan.setBackground(new java.awt.Color(196, 231, 219));
-        funPan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        atenPan.setBackground(new java.awt.Color(196, 231, 219));
+        atenPan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("Funcionários");
-        funPan.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, -1, -1));
+        jLabel11.setText("Atendentes");
+        atenPan.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, -1, -1));
 
         jSeparator1.setBackground(new java.awt.Color(0, 0, 0));
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
-        funPan.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 640, 30));
+        atenPan.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 640, 30));
 
         remFunPan.setBackground(new java.awt.Color(73, 138, 136));
 
@@ -321,12 +336,12 @@ public class TelaAdm extends javax.swing.JFrame {
                 .addGap(17, 17, 17))
         );
 
-        funPan.add(remFunPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 210, 280, 350));
+        atenPan.add(remFunPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 210, 280, 350));
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel15.setText("<html>Adicione novos funcionários que poderam ter acesso a sua aplicação ou remova funcionários que deseja remover o acesso.</html>");
-        funPan.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 510, 70));
+        jLabel15.setText("<html>Adicione novos funcionários que poderam ter acesso ao seu sistema utilizando apenas as funções de atendente ou remova funcionários que deseja remover o acesso.</html>");
+        atenPan.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 510, 70));
 
         funCadPan.setBackground(new java.awt.Color(73, 138, 136));
 
@@ -393,9 +408,178 @@ public class TelaAdm extends javax.swing.JFrame {
                 .addGap(17, 17, 17))
         );
 
-        funPan.add(funCadPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 280, 350));
+        atenPan.add(funCadPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 280, 350));
 
-        paineis.add(funPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 640));
+        paineis.add(atenPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 640));
+
+        admPan.setBackground(new java.awt.Color(196, 231, 219));
+        admPan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel17.setText("Administradores");
+        admPan.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, 370, -1));
+
+        jSeparator2.setBackground(new java.awt.Color(0, 0, 0));
+        jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
+        admPan.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 640, 30));
+
+        remAdmPan.setBackground(new java.awt.Color(73, 138, 136));
+
+        jTextField7.setBackground(new java.awt.Color(73, 138, 136));
+        jTextField7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextField7.setForeground(new java.awt.Color(255, 255, 255));
+        jTextField7.setText("Senha do administrador");
+        jTextField7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+
+        jTextField8.setBackground(new java.awt.Color(73, 138, 136));
+        jTextField8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextField8.setForeground(new java.awt.Color(255, 255, 255));
+        jTextField8.setText("Usuário do administrador");
+        jTextField8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+
+        jTextField9.setBackground(new java.awt.Color(73, 138, 136));
+        jTextField9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextField9.setForeground(new java.awt.Color(255, 255, 255));
+        jTextField9.setText("Nome do administrador");
+        jTextField9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+
+        jButton4.setBackground(new java.awt.Color(73, 138, 136));
+        jButton4.setForeground(new java.awt.Color(255, 255, 255));
+        jButton4.setText("Remover administrador");
+        jButton4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+
+        jLabel18.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel18.setText("<html>Remoção de <center>administradores</html>");
+
+        javax.swing.GroupLayout remAdmPanLayout = new javax.swing.GroupLayout(remAdmPan);
+        remAdmPan.setLayout(remAdmPanLayout);
+        remAdmPanLayout.setHorizontalGroup(
+            remAdmPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel18)
+            .addGroup(remAdmPanLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(remAdmPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField9)
+                    .addComponent(jTextField8, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+                    .addComponent(jTextField7, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        remAdmPanLayout.setVerticalGroup(
+            remAdmPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(remAdmPanLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jTextField8, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17))
+        );
+
+        admPan.add(remAdmPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 210, 280, 350));
+
+        addAdmPan.setBackground(new java.awt.Color(73, 138, 136));
+
+        jTextField11.setBackground(new java.awt.Color(73, 138, 136));
+        jTextField11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextField11.setForeground(new java.awt.Color(255, 255, 255));
+        jTextField11.setText("Usuário do administrador");
+        jTextField11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+
+        jTextField12.setBackground(new java.awt.Color(73, 138, 136));
+        jTextField12.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextField12.setForeground(new java.awt.Color(255, 255, 255));
+        jTextField12.setText("Nome do administrador");
+        jTextField12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+
+        jButton5.setBackground(new java.awt.Color(73, 138, 136));
+        jButton5.setForeground(new java.awt.Color(255, 255, 255));
+        jButton5.setText("Adicionar administrador");
+        jButton5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+
+        jLabel19.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel19.setText("<html>Adicionar novo <center>administrador</html>");
+
+        jTextField10.setBackground(new java.awt.Color(73, 138, 136));
+        jTextField10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextField10.setForeground(new java.awt.Color(255, 255, 255));
+        jTextField10.setText("Senha do administrador");
+        jTextField10.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        jTextField10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField10ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout addAdmPanLayout = new javax.swing.GroupLayout(addAdmPan);
+        addAdmPan.setLayout(addAdmPanLayout);
+        addAdmPanLayout.setHorizontalGroup(
+            addAdmPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(addAdmPanLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(addAdmPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField12)
+                    .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel19)
+                    .addComponent(jTextField10, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
+        );
+        addAdmPanLayout.setVerticalGroup(
+            addAdmPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(addAdmPanLayout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17))
+        );
+
+        admPan.add(addAdmPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 280, 350));
+
+        jLabel20.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel20.setText("<html>Adicione ou remova administradores do seu sistema.<br>Administradores possuem todas as funções deste sistema</html>");
+        admPan.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 90, 490, -1));
+
+        paineis.add(admPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 640));
+
+        pacPan.setBackground(new java.awt.Color(196, 231, 219));
+        pacPan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel21.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel21.setText("teste");
+        pacPan.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 30, 60, 130));
+
+        paneTeste.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                paneTesteInputMethodTextChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(paneTeste);
+
+        pacPan.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, 710, 510));
+
+        paineis.add(pacPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 640));
 
         background.add(paineis, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 0, 900, 640));
 
@@ -415,18 +599,20 @@ public class TelaAdm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void inicioBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inicioBtnMouseClicked
-        // TODO add your handling code here:
-        mudarPanel(inicioPan, funPan, admPan);
+
+        //Botão "inicio", com os pâramentros (mudarPanel, mudarCor, voltarCor explicados a cima)
+        mudarPanel(inicioPan, atenPan, admPan, pacPan);
         mudarCor(inicioBtn);
-        voltarCor(funBtn, admBtn, relBtn, pacienteBtn);
+        voltarCor(atenBtn, admBtn, relBtn, pacienteBtn);
     }//GEN-LAST:event_inicioBtnMouseClicked
 
-    private void funBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_funBtnMouseClicked
+    private void atenBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_atenBtnMouseClicked
         // TODO add your handling code here:
-        mudarPanel(funPan, inicioPan, admPan);
-        mudarCor(funBtn);
+        //Botão "Atendente", com os mesmos pâramentros dos demais
+        mudarPanel(atenPan, inicioPan, admPan, pacPan);
+        mudarCor(atenBtn);
         voltarCor(inicioBtn, relBtn, pacienteBtn, admBtn);
-    }//GEN-LAST:event_funBtnMouseClicked
+    }//GEN-LAST:event_atenBtnMouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
@@ -434,10 +620,28 @@ public class TelaAdm extends javax.swing.JFrame {
 
     private void admBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_admBtnMouseClicked
         // TODO add your handling code here:
-        mudarPanel(admPan, funPan, inicioPan);
+        //Botão "Administrador", com os mesmos pâramentros dos demais
+        mudarPanel(admPan, atenPan, inicioPan, pacPan);
         mudarCor(admBtn);
-        voltarCor(inicioBtn, funBtn, pacienteBtn, relBtn);
+        voltarCor(inicioBtn, atenBtn, pacienteBtn, relBtn);
     }//GEN-LAST:event_admBtnMouseClicked
+
+    private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField10ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField10ActionPerformed
+
+    private void pacienteBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pacienteBtnMouseClicked
+        // TODO add your handling code here:
+        
+        mudarPanel(pacPan, inicioPan, admPan, atenPan);
+        mudarCor(pacienteBtn);
+        voltarCor(inicioBtn, atenBtn, admBtn, relBtn);
+    }//GEN-LAST:event_pacienteBtnMouseClicked
+
+    private void paneTesteInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_paneTesteInputMethodTextChanged
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_paneTesteInputMethodTextChanged
 
     /**
      * @param args the command line arguments
@@ -475,17 +679,20 @@ public class TelaAdm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel addAdmPan;
     private javax.swing.JPanel admBtn;
     private javax.swing.JPanel admPan;
     private javax.swing.JLabel admlbl;
+    private javax.swing.JPanel atenBtn;
+    private javax.swing.JPanel atenPan;
     private javax.swing.JPanel background;
-    private javax.swing.JPanel funBtn;
     private javax.swing.JPanel funCadPan;
-    private javax.swing.JPanel funPan;
     private javax.swing.JPanel inicioBtn;
     private javax.swing.JPanel inicioPan;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -495,7 +702,11 @@ public class TelaAdm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -503,17 +714,28 @@ public class TelaAdm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField10;
+    private javax.swing.JTextField jTextField11;
+    private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField jTextField8;
+    private javax.swing.JTextField jTextField9;
     private javax.swing.JPanel menu;
+    private javax.swing.JPanel pacPan;
     private javax.swing.JPanel pacienteBtn;
     private javax.swing.JLayeredPane paineis;
+    private javax.swing.JTextPane paneTeste;
     private javax.swing.JPanel relBtn;
+    private javax.swing.JPanel remAdmPan;
     private javax.swing.JPanel remFunPan;
     // End of variables declaration//GEN-END:variables
 }
