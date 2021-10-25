@@ -1,19 +1,12 @@
 
-
-
+import java.util.Date;
 import java.awt.Color;
-import javax.swing.JFrame;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author G-FIRE
- */
 public class TelaAdm extends javax.swing.JFrame {
 
     /**
@@ -21,32 +14,92 @@ public class TelaAdm extends javax.swing.JFrame {
      */
     public TelaAdm() {
         initComponents();
-        //Ocultando os paineis ao iniciar a aplicação pela primeira vez (exceto o de inicio)
+        //Ocultando os paineis ao iniciar a aplicaÃ§Ã£o pela primeira vez (exceto o de inicio)
         atenPan.setVisible(false);
         admPan.setVisible(false);
         pacPan.setVisible(false);
+        relatorioPan.setVisible(false);
     }
 
-    //Método para mudarCor do Botão do menu, o painel colocado no parâmetro deve ser
-    //o painel correspondente ao botão selecionado
-    //Exemplo: se o usuário selecionar a opção Pacientes o método muda a cor do botão
-    //para o usuário identificar qual opção foi selecionada
-    public void mudarCor(JPanel pane) {
+    public void geraRelatorio() {
+        try {
+            relatorioTable.setRowHeight(24);
+            //Definindo modelo de pessoasTable para DefaultTableModel
+            DefaultTableModel modelo = (DefaultTableModel) relatorioTable.getModel();
+            //Definindo numero de filas por padrÃ£o para 0:
+            modelo.setNumRows(0);
+            RelatorioDAO rDAO = new RelatorioDAO();
+            Date dataInicial = new Date (dataInicialTxt.getText());
+            Date dataFinal = new Date (dataFinalTxt.getText());
+
+            Relatorio relatorio = new Relatorio(dataInicial, dataFinal);
+            //LaÃ§o de repetiÃ§Ã£o para peencher as filas da tabela
+            for (Relatorio r : rDAO.gerarRelatorio(relatorio)) {
+                //Adicionando nova fila
+                modelo.addRow(new Object[]{
+                    //com os valores obtidos:
+                    r.getMediaUm(),
+                    r.getMediaDois(),
+                    r.getMediaTres(),
+                    r.getMediaQuatro()
+                });
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro tÃ©cnico, Tente novamente mais tarde");
+        }
+    }
+
+    /**
+     * MÃ©todo para buscar usuÃ¡rios no banco de atendente
+     *
+     * @param tipo deve ser informado o tipo de usuÃ¡rio seja ele "adm" ou
+     * "func"
+     */
+    private void buscarUsuarios(String tipo) {
+        try {
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            Usuario u = new Usuario();
+            Usuario[] usuarios = usuarioDAO.obtemUsuarios(tipo);
+            admComboBox.setModel(new DefaultComboBoxModel<>(usuarios));
+            atendenteCombox.setModel(new DefaultComboBoxModel<>(usuarios));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * MÃ©todo para mudar cor do botÃ£o do menu.
+     *
+     * @param pane O painel colocado no parÃ¢metro deve ser o painel
+     * correspondente ao botÃ£o selecionado pelo usuÃ¡rio
+     * <br>Exemplo: se o usuÃ¡rio selecionar a opÃ§Ã£o Pacientes o mÃ©todo muda
+     * a cor do botÃ£o para o usuÃ¡rio identificar qual opÃ§Ã£o foi selecionada.
+     */
+    private void mudarCor(JPanel pane) {
         pane.setBackground(new Color(130, 145, 143));
     }
 
-    //Método para mudar o painel exibido, o primeiro parâmetro define o que sera exibido
-    // os demais parâmetros ocultam os demais paineis
-    public void mudarPanel(JPanel panel, JPanel pane2, JPanel pane3, JPanel pane4) {
-        panel.setVisible(true);
-        pane2.setVisible(false);
-        pane3.setVisible(false);
-        pane4.setVisible(false);
+    /**
+     * MÃ©todo para mudar o painel exibido na tela do usuÃ¡rio
+     * <br>O primeiro parÃ¢metro define o painel que sera exibido
+     * <br>Os demais parÃ¢metros ocultam os demais paineis
+     */
+    public void mudarPanel(JPanel visivel, JPanel ocultado, JPanel ocultado2,
+            JPanel ocultado3, JPanel ocultado4) {
+        visivel.setVisible(true);
+        ocultado.setVisible(false);
+        ocultado2.setVisible(false);
+        ocultado3.setVisible(false);
+        ocultado4.setVisible(false);
     }
 
-    //Método para voltar cor dos demais paineis que não foram selecionado
-    //exemplo: caso o usuário seleciona o botão de pacientes o método deve ser usado
-    //para voltar a cor dos 4 paineis restantes
+    /**
+     * MÃ©todo para voltar cor dos demais paineis que nÃ£o foram selecionado
+     * <br>Exemplo: caso o usuÃ¡rio seleciona o botÃ£o de pacientes o mÃ©todo
+     * deve ser usado para voltar a cor dos 4 paineis restantes
+     * <br>Destancando assim o painel com o mÃ©todo "mudarCor".
+     */
     public void voltarCor(JPanel pane, JPanel pane2, JPanel pane3, JPanel pane4) {
         pane.setBackground(new Color(73, 149, 136));
         pane2.setBackground(new Color(73, 149, 136));
@@ -63,21 +116,21 @@ public class TelaAdm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        background = new javax.swing.JPanel();
-        menu = new javax.swing.JPanel();
-        inicioBtn = new javax.swing.JPanel();
+        backgroundPan = new javax.swing.JPanel();
+        menuLateralPan = new javax.swing.JPanel();
+        panInicioBtn = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        atenBtn = new javax.swing.JPanel();
+        panAtenBtn = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        admBtn = new javax.swing.JPanel();
+        panAdmBtn = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         admlbl = new javax.swing.JLabel();
-        pacienteBtn = new javax.swing.JPanel();
+        panPacienteBtn = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        relBtn = new javax.swing.JPanel();
+        panRelBtn = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         paineis = new javax.swing.JLayeredPane();
@@ -87,40 +140,70 @@ public class TelaAdm extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         atenPan = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
+        linhaSeparator = new javax.swing.JSeparator();
         remFunPan = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField1 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        funcRemUser = new javax.swing.JTextField();
+        funcRemID = new javax.swing.JTextField();
+        funcRemBtn = new javax.swing.JButton();
+        atendenteCombox = new javax.swing.JComboBox<>();
         jLabel15 = new javax.swing.JLabel();
         funCadPan = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
+        FuncAddBtn = new javax.swing.JButton();
+        funcAddSenha = new javax.swing.JTextField();
+        funcAddUser = new javax.swing.JTextField();
+        funcAddNome = new javax.swing.JTextField();
         admPan = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         remAdmPan = new javax.swing.JPanel();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
+        admRemUser = new javax.swing.JTextField();
+        admRemID = new javax.swing.JTextField();
+        btnAdmRem = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
+        admComboBox = new javax.swing.JComboBox<>();
         addAdmPan = new javax.swing.JPanel();
-        jTextField11 = new javax.swing.JTextField();
-        jTextField12 = new javax.swing.JTextField();
-        jButton5 = new javax.swing.JButton();
+        admAddUser = new javax.swing.JTextField();
+        admAddNome = new javax.swing.JTextField();
+        btnAdmCad = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
-        jTextField10 = new javax.swing.JTextField();
+        admAddSenha = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
         pacPan = new javax.swing.JPanel();
         jLabel21 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        paneTeste = new javax.swing.JTextPane();
+        jLabel22 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        pacienteCadastroPan = new javax.swing.JPanel();
+        jLabel23 = new javax.swing.JLabel();
+        pacienteNomeTextField = new javax.swing.JTextField();
+        pacienteIdadeTextField = new javax.swing.JTextField();
+        pacienteSaudeCheckBox = new javax.swing.JCheckBox();
+        pacienteEndTextField = new javax.swing.JTextField();
+        pacienteNumEndTextField = new javax.swing.JTextField();
+        pacienteCepTextField = new javax.swing.JTextField();
+        cadastrarPacienteBtn = new javax.swing.JButton();
+        pacienteComplementoTextField = new javax.swing.JTextField();
+        pacienteBairroTextField = new javax.swing.JTextField();
+        pacienteCidadeTextField = new javax.swing.JTextField();
+        pacienteUfTextField = new javax.swing.JTextField();
+        relatorioPan = new javax.swing.JPanel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        dataInicialTxt = new javax.swing.JFormattedTextField();
+        dataFinalTxt = new javax.swing.JFormattedTextField();
+        gerarRelatorioBtn = new javax.swing.JButton();
+        jLabel27 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        relatorioTable = new javax.swing.JTable();
+        menuBar = new javax.swing.JMenuBar();
+        opcoesMenu = new javax.swing.JMenu();
+        logoutMenuItem = new javax.swing.JMenuItem();
+        sairMenuItem = new javax.swing.JMenuItem();
+        sobreMenu = new javax.swing.JMenu();
+        creditosMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Salvation Line");
@@ -128,119 +211,124 @@ public class TelaAdm extends javax.swing.JFrame {
         setLocationByPlatform(true);
         setResizable(false);
 
-        background.setBackground(new java.awt.Color(196, 231, 219));
-        background.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        backgroundPan.setBackground(new java.awt.Color(196, 231, 219));
+        backgroundPan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        menu.setBackground(new java.awt.Color(73, 138, 136));
-        menu.setForeground(new java.awt.Color(105, 221, 243));
+        menuLateralPan.setBackground(new java.awt.Color(73, 138, 136));
+        menuLateralPan.setForeground(new java.awt.Color(105, 221, 243));
 
-        inicioBtn.setBackground(new java.awt.Color(130, 145, 143));
-        inicioBtn.setForeground(new java.awt.Color(73, 149, 136));
-        inicioBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+        panInicioBtn.setBackground(new java.awt.Color(130, 145, 143));
+        panInicioBtn.setForeground(new java.awt.Color(73, 149, 136));
+        panInicioBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                inicioBtnMouseClicked(evt);
+                panInicioBtnMouseClicked(evt);
             }
         });
-        inicioBtn.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        panInicioBtn.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/home.png"))); // NOI18N
-        inicioBtn.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+        jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\G-FIRE\\Documents\\NetBeansProjects\\ProjetoVacina\\src\\main\\java\\Imagens\\home.png")); // NOI18N
+        panInicioBtn.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Inicio");
-        inicioBtn.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, -1, 66));
+        panInicioBtn.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, -1, 66));
 
-        atenBtn.setBackground(new java.awt.Color(73, 149, 136));
-        atenBtn.setForeground(new java.awt.Color(73, 149, 136));
-        atenBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+        panAtenBtn.setBackground(new java.awt.Color(73, 149, 136));
+        panAtenBtn.setForeground(new java.awt.Color(73, 149, 136));
+        panAtenBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                atenBtnMouseClicked(evt);
+                panAtenBtnMouseClicked(evt);
             }
         });
-        atenBtn.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        panAtenBtn.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/atendente.png"))); // NOI18N
-        atenBtn.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+        jLabel3.setIcon(new javax.swing.ImageIcon("C:\\Users\\G-FIRE\\Documents\\NetBeansProjects\\ProjetoVacina\\src\\main\\java\\Imagens\\atendente.png")); // NOI18N
+        panAtenBtn.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Atendentes");
-        atenBtn.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 160, 66));
+        panAtenBtn.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 160, 66));
 
-        admBtn.setBackground(new java.awt.Color(73, 149, 136));
-        admBtn.setForeground(new java.awt.Color(73, 149, 136));
-        admBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+        panAdmBtn.setBackground(new java.awt.Color(73, 149, 136));
+        panAdmBtn.setForeground(new java.awt.Color(73, 149, 136));
+        panAdmBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                admBtnMouseClicked(evt);
+                panAdmBtnMouseClicked(evt);
             }
         });
-        admBtn.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        panAdmBtn.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/adm.png"))); // NOI18N
-        admBtn.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+        jLabel5.setIcon(new javax.swing.ImageIcon("C:\\Users\\G-FIRE\\Documents\\NetBeansProjects\\ProjetoVacina\\src\\main\\java\\Imagens\\adm.png")); // NOI18N
+        panAdmBtn.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         admlbl.setFont(new java.awt.Font("Segoe UI", 0, 28)); // NOI18N
         admlbl.setForeground(new java.awt.Color(255, 255, 255));
         admlbl.setText("Administradores");
-        admBtn.add(admlbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 0, 220, 66));
+        panAdmBtn.add(admlbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 0, 220, 66));
 
-        pacienteBtn.setBackground(new java.awt.Color(73, 149, 136));
-        pacienteBtn.setForeground(new java.awt.Color(73, 149, 136));
-        pacienteBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+        panPacienteBtn.setBackground(new java.awt.Color(73, 149, 136));
+        panPacienteBtn.setForeground(new java.awt.Color(73, 149, 136));
+        panPacienteBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pacienteBtnMouseClicked(evt);
+                panPacienteBtnMouseClicked(evt);
             }
         });
-        pacienteBtn.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        panPacienteBtn.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/vacina.png"))); // NOI18N
-        pacienteBtn.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+        jLabel7.setIcon(new javax.swing.ImageIcon("C:\\Users\\G-FIRE\\Documents\\NetBeansProjects\\ProjetoVacina\\src\\main\\java\\Imagens\\vacina.png")); // NOI18N
+        panPacienteBtn.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Pacientes");
-        pacienteBtn.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 130, 66));
+        panPacienteBtn.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 130, 66));
 
-        relBtn.setBackground(new java.awt.Color(73, 149, 136));
-        relBtn.setForeground(new java.awt.Color(73, 149, 136));
-        relBtn.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        panRelBtn.setBackground(new java.awt.Color(73, 149, 136));
+        panRelBtn.setForeground(new java.awt.Color(73, 149, 136));
+        panRelBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                panRelBtnMouseClicked(evt);
+            }
+        });
+        panRelBtn.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/relatórios.png"))); // NOI18N
-        relBtn.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+        panRelBtn.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Relatórios");
-        relBtn.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 150, 66));
+        panRelBtn.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 150, 66));
 
-        javax.swing.GroupLayout menuLayout = new javax.swing.GroupLayout(menu);
-        menu.setLayout(menuLayout);
-        menuLayout.setHorizontalGroup(
-            menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(inicioBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(atenBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(admBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(pacienteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(relBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        javax.swing.GroupLayout menuLateralPanLayout = new javax.swing.GroupLayout(menuLateralPan);
+        menuLateralPan.setLayout(menuLateralPanLayout);
+        menuLateralPanLayout.setHorizontalGroup(
+            menuLateralPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panInicioBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panAtenBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panAdmBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panPacienteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panRelBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        menuLayout.setVerticalGroup(
-            menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuLayout.createSequentialGroup()
+        menuLateralPanLayout.setVerticalGroup(
+            menuLateralPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(menuLateralPanLayout.createSequentialGroup()
                 .addGap(131, 131, 131)
-                .addComponent(inicioBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panInicioBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(atenBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panAtenBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(admBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panAdmBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(pacienteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panPacienteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(relBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panRelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(107, Short.MAX_VALUE))
         );
 
-        background.add(menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 290, 640));
+        backgroundPan.add(menuLateralPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 290, 640));
 
         paineis.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -259,7 +347,7 @@ public class TelaAdm extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel13.setText("<html>Obrigado por escolher a nossa aplicação para fazer parte da sua tragetória, explore as nossas funcionalidades clicando nas opções do menu ao lado.</html>");
+        jLabel13.setText("<html>Obrigado por escolher a nossa aplicação para fazer parte da sua trajetória, explore as nossas funcionalidades clicando nas opções do menu ao lado.</html>");
         inicioPan.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 260, 750, 140));
 
         paineis.add(inicioPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 640));
@@ -272,39 +360,47 @@ public class TelaAdm extends javax.swing.JFrame {
         jLabel11.setText("Atendentes");
         atenPan.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, -1, -1));
 
-        jSeparator1.setBackground(new java.awt.Color(0, 0, 0));
-        jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
-        atenPan.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 640, 30));
+        linhaSeparator.setBackground(new java.awt.Color(0, 0, 0));
+        linhaSeparator.setForeground(new java.awt.Color(0, 0, 0));
+        atenPan.add(linhaSeparator, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 640, 30));
 
         remFunPan.setBackground(new java.awt.Color(73, 138, 136));
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel14.setText("<html>Remoção de <center>funcionários</html>");
+        jLabel14.setText("<html>Remoção de <center>atendentes</html>");
 
-        jTextField3.setBackground(new java.awt.Color(73, 138, 136));
-        jTextField3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField3.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField3.setText("Senha do funcionário");
-        jTextField3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        funcRemUser.setBackground(new java.awt.Color(73, 138, 136));
+        funcRemUser.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        funcRemUser.setForeground(new java.awt.Color(255, 255, 255));
+        funcRemUser.setText("Nome do atendente");
+        funcRemUser.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nome", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
 
-        jTextField2.setBackground(new java.awt.Color(73, 138, 136));
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField2.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField2.setText("Usuário do funcionario");
-        jTextField2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        funcRemID.setBackground(new java.awt.Color(73, 138, 136));
+        funcRemID.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        funcRemID.setForeground(new java.awt.Color(255, 255, 255));
+        funcRemID.setText("ID do atendente");
+        funcRemID.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
 
-        jTextField1.setBackground(new java.awt.Color(73, 138, 136));
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField1.setText("Nome do funcionário");
-        jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        funcRemBtn.setBackground(new java.awt.Color(73, 138, 136));
+        funcRemBtn.setForeground(new java.awt.Color(255, 255, 255));
+        funcRemBtn.setText("Remover atendente");
+        funcRemBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        funcRemBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                funcRemBtnActionPerformed(evt);
+            }
+        });
 
-        jButton2.setBackground(new java.awt.Color(73, 138, 136));
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Remover Funcionário");
-        jButton2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        atendenteCombox.setBackground(new java.awt.Color(73, 138, 136));
+        atendenteCombox.setForeground(new java.awt.Color(51, 51, 51));
+        atendenteCombox.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Usuário do atendente", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
+        atendenteCombox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                atendenteComboxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout remFunPanLayout = new javax.swing.GroupLayout(remFunPan);
         remFunPan.setLayout(remFunPanLayout);
@@ -314,10 +410,10 @@ public class TelaAdm extends javax.swing.JFrame {
             .addGroup(remFunPanLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(remFunPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(funcRemID)
+                    .addComponent(funcRemUser, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+                    .addComponent(funcRemBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(atendenteCombox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         remFunPanLayout.setVerticalGroup(
@@ -325,15 +421,15 @@ public class TelaAdm extends javax.swing.JFrame {
             .addGroup(remFunPanLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(atendenteCombox, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(funcRemID, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(funcRemUser, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(funcRemBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22))
         );
 
         atenPan.add(remFunPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 210, 280, 350));
@@ -348,35 +444,32 @@ public class TelaAdm extends javax.swing.JFrame {
         jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setText("<html>Cadastro de novos <center>funcionários</html>");
+        jLabel16.setText("<html>Cadastro de novos <center>atendentes</html>");
 
-        jButton3.setBackground(new java.awt.Color(73, 138, 136));
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Adicionar Funcionário");
-        jButton3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        FuncAddBtn.setBackground(new java.awt.Color(73, 138, 136));
+        FuncAddBtn.setForeground(new java.awt.Color(255, 255, 255));
+        FuncAddBtn.setText("Adicionar Atendente");
+        FuncAddBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        FuncAddBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                FuncAddBtnActionPerformed(evt);
             }
         });
 
-        jTextField4.setBackground(new java.awt.Color(73, 138, 136));
-        jTextField4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField4.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField4.setText("Senha do funcionário");
-        jTextField4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        funcAddSenha.setBackground(new java.awt.Color(73, 138, 136));
+        funcAddSenha.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        funcAddSenha.setForeground(new java.awt.Color(255, 255, 255));
+        funcAddSenha.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Senha", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
 
-        jTextField5.setBackground(new java.awt.Color(73, 138, 136));
-        jTextField5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField5.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField5.setText("Usuário do funcionario");
-        jTextField5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        funcAddUser.setBackground(new java.awt.Color(73, 138, 136));
+        funcAddUser.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        funcAddUser.setForeground(new java.awt.Color(255, 255, 255));
+        funcAddUser.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Usuário", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
 
-        jTextField6.setBackground(new java.awt.Color(73, 138, 136));
-        jTextField6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField6.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField6.setText("Nome do funcionário");
-        jTextField6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        funcAddNome.setBackground(new java.awt.Color(73, 138, 136));
+        funcAddNome.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        funcAddNome.setForeground(new java.awt.Color(255, 255, 255));
+        funcAddNome.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nome", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
 
         javax.swing.GroupLayout funCadPanLayout = new javax.swing.GroupLayout(funCadPan);
         funCadPan.setLayout(funCadPanLayout);
@@ -385,10 +478,10 @@ public class TelaAdm extends javax.swing.JFrame {
             .addGroup(funCadPanLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(funCadPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
-                    .addComponent(jTextField6)
-                    .addComponent(jTextField5)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(FuncAddBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+                    .addComponent(funcAddNome)
+                    .addComponent(funcAddUser)
+                    .addComponent(funcAddSenha, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
             .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING)
         );
@@ -397,14 +490,14 @@ public class TelaAdm extends javax.swing.JFrame {
             .addGroup(funCadPanLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(funcAddNome, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(funcAddUser, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(funcAddSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(FuncAddBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(17, 17, 17))
         );
 
@@ -426,33 +519,43 @@ public class TelaAdm extends javax.swing.JFrame {
 
         remAdmPan.setBackground(new java.awt.Color(73, 138, 136));
 
-        jTextField7.setBackground(new java.awt.Color(73, 138, 136));
-        jTextField7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField7.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField7.setText("Senha do administrador");
-        jTextField7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        admRemUser.setEditable(false);
+        admRemUser.setBackground(new java.awt.Color(73, 138, 136));
+        admRemUser.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        admRemUser.setForeground(new java.awt.Color(255, 255, 255));
+        admRemUser.setText("Nome do administrador");
+        admRemUser.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nome", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
 
-        jTextField8.setBackground(new java.awt.Color(73, 138, 136));
-        jTextField8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField8.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField8.setText("Usuário do administrador");
-        jTextField8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        admRemID.setEditable(false);
+        admRemID.setBackground(new java.awt.Color(73, 138, 136));
+        admRemID.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        admRemID.setForeground(new java.awt.Color(255, 255, 255));
+        admRemID.setText("ID do administrador");
+        admRemID.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
 
-        jTextField9.setBackground(new java.awt.Color(73, 138, 136));
-        jTextField9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField9.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField9.setText("Nome do administrador");
-        jTextField9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
-
-        jButton4.setBackground(new java.awt.Color(73, 138, 136));
-        jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setText("Remover administrador");
-        jButton4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        btnAdmRem.setBackground(new java.awt.Color(73, 138, 136));
+        btnAdmRem.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdmRem.setText("Remover administrador");
+        btnAdmRem.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        btnAdmRem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdmRemActionPerformed(evt);
+            }
+        });
 
         jLabel18.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel18.setText("<html>Remoção de <center>administradores</html>");
+
+        admComboBox.setBackground(new java.awt.Color(73, 138, 136));
+        admComboBox.setForeground(new java.awt.Color(255, 255, 255));
+        admComboBox.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Usuário do administrador", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
+        admComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                admComboBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout remAdmPanLayout = new javax.swing.GroupLayout(remAdmPan);
         remAdmPan.setLayout(remAdmPanLayout);
@@ -462,10 +565,10 @@ public class TelaAdm extends javax.swing.JFrame {
             .addGroup(remAdmPanLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(remAdmPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField9)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(admRemID)
+                    .addComponent(admRemUser, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+                    .addComponent(btnAdmRem, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(admComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         remAdmPanLayout.setVerticalGroup(
@@ -473,14 +576,14 @@ public class TelaAdm extends javax.swing.JFrame {
             .addGroup(remAdmPanLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(admComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(admRemID, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(admRemUser, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField8, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAdmRem, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(17, 17, 17))
         );
 
@@ -488,38 +591,35 @@ public class TelaAdm extends javax.swing.JFrame {
 
         addAdmPan.setBackground(new java.awt.Color(73, 138, 136));
 
-        jTextField11.setBackground(new java.awt.Color(73, 138, 136));
-        jTextField11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField11.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField11.setText("Usuário do administrador");
-        jTextField11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        admAddUser.setBackground(new java.awt.Color(73, 138, 136));
+        admAddUser.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        admAddUser.setForeground(new java.awt.Color(255, 255, 255));
+        admAddUser.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Usuário", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
 
-        jTextField12.setBackground(new java.awt.Color(73, 138, 136));
-        jTextField12.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField12.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField12.setText("Nome do administrador");
-        jTextField12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        admAddNome.setBackground(new java.awt.Color(73, 138, 136));
+        admAddNome.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        admAddNome.setForeground(new java.awt.Color(255, 255, 255));
+        admAddNome.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nome", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
 
-        jButton5.setBackground(new java.awt.Color(73, 138, 136));
-        jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("Adicionar administrador");
-        jButton5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        btnAdmCad.setBackground(new java.awt.Color(73, 138, 136));
+        btnAdmCad.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdmCad.setText("Adicionar administrador");
+        btnAdmCad.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        btnAdmCad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdmCadActionPerformed(evt);
+            }
+        });
 
         jLabel19.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(255, 255, 255));
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel19.setText("<html>Adicionar novo <center>administrador</html>");
 
-        jTextField10.setBackground(new java.awt.Color(73, 138, 136));
-        jTextField10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField10.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField10.setText("Senha do administrador");
-        jTextField10.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
-        jTextField10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField10ActionPerformed(evt);
-            }
-        });
+        admAddSenha.setBackground(new java.awt.Color(73, 138, 136));
+        admAddSenha.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        admAddSenha.setForeground(new java.awt.Color(255, 255, 255));
+        admAddSenha.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Senha", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
 
         javax.swing.GroupLayout addAdmPanLayout = new javax.swing.GroupLayout(addAdmPan);
         addAdmPan.setLayout(addAdmPanLayout);
@@ -528,11 +628,11 @@ public class TelaAdm extends javax.swing.JFrame {
             .addGroup(addAdmPanLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(addAdmPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField12)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(admAddNome)
+                    .addComponent(admAddUser, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+                    .addComponent(btnAdmCad, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel19)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(admAddSenha, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         addAdmPanLayout.setVerticalGroup(
@@ -540,14 +640,14 @@ public class TelaAdm extends javax.swing.JFrame {
             .addGroup(addAdmPanLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(admAddNome, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(admAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(admAddSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnAdmCad, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(17, 17, 17))
         );
 
@@ -563,85 +663,552 @@ public class TelaAdm extends javax.swing.JFrame {
         pacPan.setBackground(new java.awt.Color(196, 231, 219));
         pacPan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel21.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel21.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel21.setText("teste");
-        pacPan.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 30, 60, 130));
+        jLabel21.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setText("Pacientes");
+        pacPan.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 40, 220, 40));
 
-        paneTeste.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                paneTesteInputMethodTextChanged(evt);
+        jLabel22.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel22.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel22.setText("<html>Adicione novos pacientes na fila de vacinação<br>Pacientes cadastrados serão visualizados na fila por atendentes</html>");
+        pacPan.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 90, 510, -1));
+        pacPan.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 650, 10));
+
+        pacienteCadastroPan.setBackground(new java.awt.Color(73, 138, 136));
+        pacienteCadastroPan.setForeground(new java.awt.Color(73, 138, 136));
+
+        jLabel23.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel23.setText("Cadastro");
+
+        pacienteNomeTextField.setBackground(new java.awt.Color(73, 138, 136));
+        pacienteNomeTextField.setForeground(new java.awt.Color(51, 51, 51));
+        pacienteNomeTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nome", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
+
+        pacienteIdadeTextField.setBackground(new java.awt.Color(73, 138, 136));
+        pacienteIdadeTextField.setForeground(new java.awt.Color(51, 51, 51));
+        pacienteIdadeTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Idade", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
+
+        pacienteSaudeCheckBox.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        pacienteSaudeCheckBox.setForeground(new java.awt.Color(51, 51, 51));
+        pacienteSaudeCheckBox.setText("<html>Profissão do paciente está associada à área da saúde</html>");
+
+        pacienteEndTextField.setBackground(new java.awt.Color(73, 138, 136));
+        pacienteEndTextField.setForeground(new java.awt.Color(51, 51, 51));
+        pacienteEndTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Logradouro", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
+
+        pacienteNumEndTextField.setBackground(new java.awt.Color(73, 138, 136));
+        pacienteNumEndTextField.setForeground(new java.awt.Color(51, 51, 51));
+        pacienteNumEndTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Número", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
+
+        pacienteCepTextField.setBackground(new java.awt.Color(73, 138, 136));
+        pacienteCepTextField.setForeground(new java.awt.Color(51, 51, 51));
+        pacienteCepTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CEP", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
+
+        cadastrarPacienteBtn.setBackground(new java.awt.Color(50, 95, 94));
+        cadastrarPacienteBtn.setForeground(new java.awt.Color(0, 0, 0));
+        cadastrarPacienteBtn.setText("Cadastrar paciente");
+        cadastrarPacienteBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 51)));
+        cadastrarPacienteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadastrarPacienteBtnActionPerformed(evt);
             }
         });
-        jScrollPane1.setViewportView(paneTeste);
 
-        pacPan.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, 710, 510));
+        pacienteComplementoTextField.setBackground(new java.awt.Color(73, 138, 136));
+        pacienteComplementoTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Complemento", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
+
+        pacienteBairroTextField.setBackground(new java.awt.Color(73, 138, 136));
+        pacienteBairroTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Bairro", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
+
+        pacienteCidadeTextField.setBackground(new java.awt.Color(73, 138, 136));
+        pacienteCidadeTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cidade", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
+
+        pacienteUfTextField.setBackground(new java.awt.Color(73, 138, 136));
+        pacienteUfTextField.setToolTipText("Exemplo: SP, RJ , BH..");
+        pacienteUfTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "UF", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(51, 51, 51))); // NOI18N
+        pacienteUfTextField.setMaximumSize(new java.awt.Dimension(2, 2));
+        pacienteUfTextField.setMinimumSize(new java.awt.Dimension(0, 0));
+
+        javax.swing.GroupLayout pacienteCadastroPanLayout = new javax.swing.GroupLayout(pacienteCadastroPan);
+        pacienteCadastroPan.setLayout(pacienteCadastroPanLayout);
+        pacienteCadastroPanLayout.setHorizontalGroup(
+            pacienteCadastroPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pacienteCadastroPanLayout.createSequentialGroup()
+                .addGroup(pacienteCadastroPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pacienteCadastroPanLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(pacienteCadastroPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pacienteCadastroPanLayout.createSequentialGroup()
+                                .addComponent(pacienteNomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(pacienteIdadeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(27, 27, 27)
+                                .addComponent(pacienteSaudeCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(pacienteCadastroPanLayout.createSequentialGroup()
+                                .addGroup(pacienteCadastroPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(pacienteCadastroPanLayout.createSequentialGroup()
+                                        .addComponent(pacienteBairroTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(pacienteCidadeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(pacienteUfTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(pacienteCadastroPanLayout.createSequentialGroup()
+                                        .addComponent(pacienteCepTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(pacienteEndTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(pacienteNumEndTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(pacienteComplementoTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))))
+                    .addGroup(pacienteCadastroPanLayout.createSequentialGroup()
+                        .addGap(337, 337, 337)
+                        .addComponent(jLabel23))
+                    .addGroup(pacienteCadastroPanLayout.createSequentialGroup()
+                        .addGap(294, 294, 294)
+                        .addComponent(cadastrarPacienteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        pacienteCadastroPanLayout.setVerticalGroup(
+            pacienteCadastroPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pacienteCadastroPanLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel23)
+                .addGroup(pacienteCadastroPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pacienteCadastroPanLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(pacienteCadastroPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(pacienteNomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pacienteIdadeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(pacienteCadastroPanLayout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(pacienteSaudeCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pacienteCadastroPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pacienteComplementoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pacienteCadastroPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(pacienteCepTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pacienteEndTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pacienteNumEndTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addGroup(pacienteCadastroPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pacienteBairroTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
+                    .addComponent(pacienteCidadeTextField)
+                    .addComponent(pacienteUfTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(29, 29, 29)
+                .addComponent(cadastrarPacienteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
+        );
+
+        pacPan.add(pacienteCadastroPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 860, 390));
 
         paineis.add(pacPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 640));
 
-        background.add(paineis, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 0, 900, 640));
+        relatorioPan.setBackground(new java.awt.Color(196, 231, 219));
+        relatorioPan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel24.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
+        jLabel24.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel24.setText("Relatórios");
+        relatorioPan.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(378, 20, -1, -1));
+
+        jLabel25.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel25.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel25.setText("Data inicial");
+        relatorioPan.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, -1, 40));
+
+        jLabel26.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel26.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel26.setText("Data Final");
+        jLabel26.setToolTipText("");
+        relatorioPan.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 150, -1, 50));
+
+        dataInicialTxt.setBackground(new java.awt.Color(204, 204, 204));
+        dataInicialTxt.setForeground(new java.awt.Color(51, 51, 51));
+        try {
+            dataInicialTxt.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####/##/##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        dataInicialTxt.setToolTipText("");
+        dataInicialTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        relatorioPan.add(dataInicialTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 160, 140, -1));
+
+        dataFinalTxt.setBackground(new java.awt.Color(204, 204, 204));
+        dataFinalTxt.setForeground(new java.awt.Color(51, 51, 51));
+        try {
+            dataFinalTxt.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####/##/##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        dataFinalTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        relatorioPan.add(dataFinalTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 160, 150, -1));
+
+        gerarRelatorioBtn.setBackground(new java.awt.Color(0, 102, 102));
+        gerarRelatorioBtn.setForeground(new java.awt.Color(0, 0, 0));
+        gerarRelatorioBtn.setText("Gerar relatório");
+        gerarRelatorioBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gerarRelatorioBtnActionPerformed(evt);
+            }
+        });
+        relatorioPan.add(gerarRelatorioBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 220, 120, 40));
+
+        jLabel27.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel27.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel27.setText("<html>Insira a data Inicial e a data final que deseja emitir o relatório de vacinação, Insira a data utilizando o formato Ano/Mês/Dia</html>");
+        relatorioPan.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 60, 590, 100));
+        relatorioPan.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 143, 690, 10));
+
+        relatorioTable.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        relatorioTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null}
+            },
+            new String [] {
+                "Média diária para maiores de 90 anos", "Média diária entre 70 há 90 anos", "Média diária entre 50 há 70 anos", "Média diária menores 50 anos"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false, true, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(relatorioTable);
+        relatorioTable.getAccessibleContext().setAccessibleName("Média diária de vacinação");
+
+        relatorioPan.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 860, 220));
+
+        paineis.add(relatorioPan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 640));
+
+        backgroundPan.add(paineis, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 0, 900, 640));
+
+        opcoesMenu.setText("Opções");
+
+        logoutMenuItem.setText("Logout");
+        logoutMenuItem.setToolTipText("Fazer logout");
+        logoutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutMenuItemActionPerformed(evt);
+            }
+        });
+        opcoesMenu.add(logoutMenuItem);
+
+        sairMenuItem.setText("Sair");
+        sairMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sairMenuItemActionPerformed(evt);
+            }
+        });
+        opcoesMenu.add(sairMenuItem);
+
+        menuBar.add(opcoesMenu);
+
+        sobreMenu.setText("Sobre");
+
+        creditosMenuItem.setText("Créditos");
+        creditosMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                creditosMenuItemActionPerformed(evt);
+            }
+        });
+        sobreMenu.add(creditosMenuItem);
+
+        menuBar.add(sobreMenu);
+
+        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(backgroundPan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(backgroundPan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void inicioBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inicioBtnMouseClicked
+    private void panInicioBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panInicioBtnMouseClicked
 
-        //Botão "inicio", com os pâramentros (mudarPanel, mudarCor, voltarCor explicados a cima)
-        mudarPanel(inicioPan, atenPan, admPan, pacPan);
-        mudarCor(inicioBtn);
-        voltarCor(atenBtn, admBtn, relBtn, pacienteBtn);
-    }//GEN-LAST:event_inicioBtnMouseClicked
+        //BotÃ£o "inicio" exibe o painel de inicio
+        //com os mÃ©todos (mudarPanel, mudarCor, voltarCor explicados a cima)
+        mudarPanel(inicioPan, atenPan, admPan, pacPan, relatorioPan);
+        mudarCor(panInicioBtn);
+        voltarCor(panAtenBtn, panAdmBtn, panRelBtn, panPacienteBtn);
+    }//GEN-LAST:event_panInicioBtnMouseClicked
 
-    private void atenBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_atenBtnMouseClicked
-        // TODO add your handling code here:
-        //Botão "Atendente", com os mesmos pâramentros dos demais
-        mudarPanel(atenPan, inicioPan, admPan, pacPan);
-        mudarCor(atenBtn);
-        voltarCor(inicioBtn, relBtn, pacienteBtn, admBtn);
-    }//GEN-LAST:event_atenBtnMouseClicked
+    private void panAtenBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panAtenBtnMouseClicked
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        //BotÃ£o "Atendente" exibe o painel de atendentes
+        //com os mesmos pÃ¢ramentros dos demais
+        mudarPanel(atenPan, inicioPan, admPan, pacPan, relatorioPan);
+        mudarCor(panAtenBtn);
+        voltarCor(panInicioBtn, panRelBtn, panPacienteBtn, panAdmBtn);
+        String tipouser = "2";
+        buscarUsuarios(tipouser);
+    }//GEN-LAST:event_panAtenBtnMouseClicked
 
-    private void admBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_admBtnMouseClicked
-        // TODO add your handling code here:
-        //Botão "Administrador", com os mesmos pâramentros dos demais
-        mudarPanel(admPan, atenPan, inicioPan, pacPan);
-        mudarCor(admBtn);
-        voltarCor(inicioBtn, atenBtn, pacienteBtn, relBtn);
-    }//GEN-LAST:event_admBtnMouseClicked
+    private void FuncAddBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FuncAddBtnActionPerformed
 
-    private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField10ActionPerformed
+        //BotÃ£o de adicionar funcionÃ¡rio(atendente)
+        //Passando os dados inseridos para string
+        String nome = funcAddNome.getText();
+        String user = funcAddUser.getText();
+        String senha = funcAddSenha.getText();
+        String tipouser = "2"; //tipo do usuÃ¡rio que serÃ¡ definido
+        try {
+            //Se nome, user e senha nÃ£o estiverem vazios Ã© inserido no banco de dados
+            if (nome.length() > 0 && user.length() > 0 && senha.length() > 0) {
+                //Instanciando objeto Usuario e passando como parÃ¢metro os dados inseridos e o tipo de usuÃ¡rio
+                Usuario usuario = new Usuario(nome, user, senha, tipouser);
+                //Instanciando objeto UsuarioDAO
+                UsuarioDAO uDao = new UsuarioDAO();
 
-    private void pacienteBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pacienteBtnMouseClicked
-        // TODO add your handling code here:
-        
-        mudarPanel(pacPan, inicioPan, admPan, atenPan);
-        mudarCor(pacienteBtn);
-        voltarCor(inicioBtn, atenBtn, admBtn, relBtn);
-    }//GEN-LAST:event_pacienteBtnMouseClicked
+                //Adicionando usuario inserido no banco de dados
+                uDao.usuarioAdd(usuario);
 
-    private void paneTesteInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_paneTesteInputMethodTextChanged
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_paneTesteInputMethodTextChanged
+                JOptionPane.showMessageDialog(this, "Atendente adicionado com sucesso");
+
+                //Limpando campos de texto
+                funcAddNome.setText("");
+                funcAddUser.setText("");
+                funcAddSenha.setText("");
+
+                //atualizando lista
+                buscarUsuarios(tipouser);
+            } else {
+                //Se nÃ£o emite o erro:
+                JOptionPane.showMessageDialog(this, "Um dos campos esta vÃ¡zio!");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, ex);
+        }
+
+    }//GEN-LAST:event_FuncAddBtnActionPerformed
+
+    private void panAdmBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panAdmBtnMouseClicked
+
+        //BotÃ£o "administrador" exibe o painel de administradores
+        //com os mesmos pÃ¢ramentros dos demais
+        mudarPanel(admPan, atenPan, inicioPan, pacPan, relatorioPan);
+        mudarCor(panAdmBtn);
+        voltarCor(panInicioBtn, panAtenBtn, panPacienteBtn, panRelBtn);
+        String tipouser = "1";
+        buscarUsuarios(tipouser);
+    }//GEN-LAST:event_panAdmBtnMouseClicked
+
+    private void panPacienteBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panPacienteBtnMouseClicked
+        //BotÃ£o "Paciente" exibe o painel de pacientes
+        //com os mesmos pÃ¢ramentros dos demais
+        mudarPanel(pacPan, inicioPan, admPan, atenPan, relatorioPan);
+        mudarCor(panPacienteBtn);
+        voltarCor(panInicioBtn, panAtenBtn, panAdmBtn, panRelBtn);
+    }//GEN-LAST:event_panPacienteBtnMouseClicked
+
+    private void btnAdmCadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdmCadActionPerformed
+        //BotÃ£o de adicionar Administrador
+        //Passando os dados inseridos para string
+        String nome = admAddNome.getText();
+        String user = admAddUser.getText();
+        String senha = admAddSenha.getText();
+
+        try {
+            //Se nome, user e senha nÃ£o estiverem vazios Ã© inserido no banco de dados
+            if (nome.length() > 0 && user.length() > 0 && senha.length() > 0) {
+                String tipouser = "1"; //Tipo de usuÃ¡rio Administrador
+                //Instaciando o objeto Usuario, passando como parÃ¢metro os dados inseridos e o tipo de usuÃ¡rio
+                Usuario usuario = new Usuario(nome, user, senha, tipouser);
+                //Instanciando o objeto UsuarioDAO
+                UsuarioDAO uDAO = new UsuarioDAO();
+                //Inserindo administrador no banco de dados
+                uDAO.usuarioAdd(usuario);
+
+                JOptionPane.showMessageDialog(this, "ADM Cadastrado com sucesso!");
+
+                //Limpando campos de texto
+                admAddNome.setText("");
+                admAddUser.setText("");
+                admAddSenha.setText("");
+                //Atualizando lista
+                buscarUsuarios(tipouser);
+
+            } else {
+                //Se nÃ£o emite o erro:
+                JOptionPane.showMessageDialog(this, "Um dos campos esta vÃ¡zio!");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Ocorreu um erro contate o suporte! " + ex);
+        }
+    }//GEN-LAST:event_btnAdmCadActionPerformed
+
+    private void btnAdmRemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdmRemActionPerformed
+
+        //BotÃ£o de remover administradores
+        //Passando os dados inseridos para String
+        int codigo = Integer.parseInt(admRemID.getText());
+        try {
+            String tipouser = "1"; //Tipo de usuÃ¡rio a ser removido
+            //Instanciando objeto Usuario sem parÃ¢metros utilizando construtor padrÃ£o
+            Usuario usuario = new Usuario(codigo);
+            //Instanciando objeto UsuarioDAO
+            UsuarioDAO uDAO = new UsuarioDAO();
+            //Removendo Administrador do banco de dados
+            uDAO.usuarioRemover(usuario);
+
+            JOptionPane.showMessageDialog(this, "ADM removido com sucesso!");
+
+            //Limpando campos de texto
+            admRemID.setText("");
+            admRemUser.setText("");
+            //Atualizando lsita
+            buscarUsuarios(tipouser);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro tÃ©cnico, tente novamente mais tarde");
+        }
+    }//GEN-LAST:event_btnAdmRemActionPerformed
+
+    private void funcRemBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_funcRemBtnActionPerformed
+        //BotÃ£o de remover Atendentes
+        //Passando os dados inseridos para Strings
+        int codigo = Integer.parseInt(funcRemID.getText());
+        try {
+            String tipouser = "2";// Tipo de usuÃ¡rio a ser removido
+            //Instanciando objeto Usuario sem parÃ¢metros utilizando o construtor padrÃ£o
+            Usuario usuario = new Usuario();
+            //Definindo os dados inseridos
+            usuario.setCodigo(codigo);
+            usuario.setTipouser(tipouser);
+            //Instanciando objeto UsuarioDAO
+            UsuarioDAO uDao = new UsuarioDAO();
+            //Removendo atendente do banco de dados
+            uDao.usuarioRemover(usuario);
+
+            JOptionPane.showMessageDialog(this, "Atendente removido com sucesso!");
+
+            //Limpando campos de texto
+            funcRemID.setText("");
+            funcRemUser.setText("");
+
+            //atualizando lista
+            buscarUsuarios(tipouser);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro tÃ©cnico, tente novamente mais tarde!");
+        }
+
+    }//GEN-LAST:event_funcRemBtnActionPerformed
+
+    private void logoutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutMenuItemActionPerformed
+        //OpÃ§Ã£o da menuBar para sair do sistema
+        TelaLogin telalogin = new TelaLogin();
+        telalogin.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_logoutMenuItemActionPerformed
+
+    private void admComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_admComboBoxActionPerformed
+        //Obtendo dados do Usuario selecionado
+        Usuario usuario = (Usuario) admComboBox.getSelectedItem();
+
+        //Definindo os campos de textos com os dados obtidos do usuario selecionado
+        admRemID.setText(String.valueOf(usuario.getCodigo()));
+        admRemUser.setText(usuario.getUser());
+
+    }//GEN-LAST:event_admComboBoxActionPerformed
+
+    private void atendenteComboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atendenteComboxActionPerformed
+        //Obtendo dados do Usuario selecionado
+        Usuario usuario = (Usuario) atendenteCombox.getSelectedItem();
+
+        //Definindo os campos de textos com os dados obtidos do usuario selecionado
+        funcRemID.setText(String.valueOf(usuario.getCodigo()));
+        funcRemUser.setText(usuario.getUser());
+    }//GEN-LAST:event_atendenteComboxActionPerformed
+
+    private void cadastrarPacienteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarPacienteBtnActionPerformed
+        //Obtendo dados inseridos no cadastro do paciente:
+        String nome = pacienteNomeTextField.getText();
+        int idade = Integer.parseInt(pacienteIdadeTextField.getText());
+        boolean areaSaude = pacienteSaudeCheckBox.isSelected();
+        String endereco = pacienteEndTextField.getText();
+        String numeroEndereco = pacienteNumEndTextField.getText();
+        String complemento = pacienteComplementoTextField.getText();
+        String bairro = pacienteBairroTextField.getText();
+        String cidade = pacienteCidadeTextField.getText();
+        String uf = pacienteUfTextField.getText();
+        String cep = pacienteCepTextField.getText();
+        int prioridade;
+        //Se idade for maior ou igual a 70 prioridade Ã© definida como 1:
+        if (idade >= 70) {
+            prioridade = 1;
+            //Se nÃ£o, se AreaSaude for definida como true na  CheckBox prioridade Ã© definida como 2:
+        } else if (areaSaude == true) {
+            prioridade = 2;
+            //Se nÃ£o, prioridade Ã© definda como 3:
+        } else {
+            prioridade = 3;
+        }
+        //Passando os dados inseridos para objeto pessoa da Classe Paciente:
+        Paciente pessoa = new Paciente(nome, idade, areaSaude, endereco, numeroEndereco, complemento,
+                bairro, cidade, uf, cep, prioridade);
+        PacienteDAO pessoaDAO = new PacienteDAO();
+        //Inserindo pessoa/Paciente no banco de dados
+        try {
+
+            pessoaDAO.pacienteAdd(pessoa);
+            JOptionPane.showMessageDialog(this, "Paciente cadastrado com sucesso!");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Problemas tÃ©cnicos, tente novamente mais tarde");
+        }
+    }//GEN-LAST:event_cadastrarPacienteBtnActionPerformed
+
+    private void panRelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panRelBtnMouseClicked
+        mudarPanel(relatorioPan, admPan, atenPan, inicioPan, pacPan);
+        mudarCor(panRelBtn);
+        voltarCor(panAdmBtn, panAtenBtn, panInicioBtn, panPacienteBtn);
+    }//GEN-LAST:event_panRelBtnMouseClicked
+
+    private void gerarRelatorioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gerarRelatorioBtnActionPerformed
+
+        try {
+            geraRelatorio();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Problemas tÃ©cnicos, tente novamente mais tarde!");
+        }
+
+    }//GEN-LAST:event_gerarRelatorioBtnActionPerformed
+
+    private void sairMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairMenuItemActionPerformed
+        dispose();
+    }//GEN-LAST:event_sairMenuItemActionPerformed
+
+    private void creditosMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_creditosMenuItemActionPerformed
+        String creditos = "<html><b>Nossa Equipe</b><br>Guilherme Maiotto Guardia<br>Giulia Nogueira de Oliveira"
+                + "<br>Vinicius Ruffo Viviani<br>Yuri Alonso BrandÃ£o" + "<br><br><b>Agradicimentos</b>"
+                + ":<br>Igor Moreira FÃ©lix<br>Andreia Machion</html,>";
+        JLabel label = new JLabel(creditos);
+        JOptionPane.showMessageDialog(this, label, "CrÃ©ditos", 1);
+    }//GEN-LAST:event_creditosMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -660,13 +1227,17 @@ public class TelaAdm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaAdm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaAdm.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaAdm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaAdm.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaAdm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaAdm.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaAdm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaAdm.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -679,20 +1250,34 @@ public class TelaAdm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton FuncAddBtn;
     private javax.swing.JPanel addAdmPan;
-    private javax.swing.JPanel admBtn;
+    private javax.swing.JTextField admAddNome;
+    private javax.swing.JTextField admAddSenha;
+    private javax.swing.JTextField admAddUser;
+    private javax.swing.JComboBox<Usuario> admComboBox;
     private javax.swing.JPanel admPan;
+    private javax.swing.JTextField admRemID;
+    private javax.swing.JTextField admRemUser;
     private javax.swing.JLabel admlbl;
-    private javax.swing.JPanel atenBtn;
     private javax.swing.JPanel atenPan;
-    private javax.swing.JPanel background;
+    private javax.swing.JComboBox<Usuario> atendenteCombox;
+    private javax.swing.JPanel backgroundPan;
+    private javax.swing.JButton btnAdmCad;
+    private javax.swing.JButton btnAdmRem;
+    private javax.swing.JButton cadastrarPacienteBtn;
+    private javax.swing.JMenuItem creditosMenuItem;
+    private javax.swing.JFormattedTextField dataFinalTxt;
+    private javax.swing.JFormattedTextField dataInicialTxt;
     private javax.swing.JPanel funCadPan;
-    private javax.swing.JPanel inicioBtn;
+    private javax.swing.JTextField funcAddNome;
+    private javax.swing.JTextField funcAddSenha;
+    private javax.swing.JTextField funcAddUser;
+    private javax.swing.JButton funcRemBtn;
+    private javax.swing.JTextField funcRemID;
+    private javax.swing.JTextField funcRemUser;
+    private javax.swing.JButton gerarRelatorioBtn;
     private javax.swing.JPanel inicioPan;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -707,6 +1292,12 @@ public class TelaAdm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -714,28 +1305,38 @@ public class TelaAdm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
-    private javax.swing.JPanel menu;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator linhaSeparator;
+    private javax.swing.JMenuItem logoutMenuItem;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JPanel menuLateralPan;
+    private javax.swing.JMenu opcoesMenu;
     private javax.swing.JPanel pacPan;
-    private javax.swing.JPanel pacienteBtn;
+    private javax.swing.JTextField pacienteBairroTextField;
+    private javax.swing.JPanel pacienteCadastroPan;
+    private javax.swing.JTextField pacienteCepTextField;
+    private javax.swing.JTextField pacienteCidadeTextField;
+    private javax.swing.JTextField pacienteComplementoTextField;
+    private javax.swing.JTextField pacienteEndTextField;
+    private javax.swing.JTextField pacienteIdadeTextField;
+    private javax.swing.JTextField pacienteNomeTextField;
+    private javax.swing.JTextField pacienteNumEndTextField;
+    private javax.swing.JCheckBox pacienteSaudeCheckBox;
+    private javax.swing.JTextField pacienteUfTextField;
     private javax.swing.JLayeredPane paineis;
-    private javax.swing.JTextPane paneTeste;
-    private javax.swing.JPanel relBtn;
+    private javax.swing.JPanel panAdmBtn;
+    private javax.swing.JPanel panAtenBtn;
+    private javax.swing.JPanel panInicioBtn;
+    private javax.swing.JPanel panPacienteBtn;
+    private javax.swing.JPanel panRelBtn;
+    private javax.swing.JPanel relatorioPan;
+    private javax.swing.JTable relatorioTable;
     private javax.swing.JPanel remAdmPan;
     private javax.swing.JPanel remFunPan;
+    private javax.swing.JMenuItem sairMenuItem;
+    private javax.swing.JMenu sobreMenu;
     // End of variables declaration//GEN-END:variables
 }

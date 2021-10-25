@@ -4,16 +4,15 @@ import java.sql.DriverManager;
 
 public class ConnectionFactory {
 
-    private String usuario = "root";
-    private String senha = "48795231";
-    private String host = "localhost";
-    private String porta = "3306";
-    private String bd = "db_salvationl";
+    private static String usuario = "root";
+    private static String senha = "48795231";
+    private static String host = "localhost";
+    private static String porta = "3306";
+    private static String bd = "db_salvationl";
 
-    public Connection obtemConexao() {
+    public static Connection obtemConexao() {
         try {
-            Connection c = DriverManager.getConnection("jdbc:mysql://" + host + ":" + porta + "/" + bd, usuario, senha);
-            return c;
+            return DriverManager.getConnection("jdbc:mysql://" + host + ":" + porta + "/" + bd, usuario, senha);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
